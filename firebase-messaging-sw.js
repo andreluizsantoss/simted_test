@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/10.11.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js');
 
 firebase.initializeApp({
     apiKey: "AIzaSyCwROsAEGB-FETpisk0moC6t7ecrm0knCk",
@@ -11,4 +11,17 @@ firebase.initializeApp({
     measurementId: "G-QP36CQHVQE"
 });
 
+// Obtém a instância do Messaging
 const messaging = firebase.messaging();
+
+// Opcional: recebe mensagens em background
+messaging.onBackgroundMessage(function (payload) {
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+        body: payload.notification.body,
+        icon: '/icons/icon-192.png' // ajuste o caminho do ícone se quiser
+    };
+
+    self.registration.showNotification(notificationTitle, notificationOptions);
+});
